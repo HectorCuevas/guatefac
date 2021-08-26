@@ -35,10 +35,9 @@ namespace guatefac
             string xml = "";
             FACT_NUM = fact_num;
             TIPODOC = tipoDoc;
-            Configuracion.DOC = tipoDoc;
             VFPData data =  Deserialize<VFPData>(encabezado);
             VFPDataDet dataDet = DeserializeDetail<VFPDataDet>(detalle);
-            xml = XML.setXML(data, dataDet, tipoDoc);
+            xml = setXML(data, dataDet, tipoDoc);
             saveXML(xml, fact_num, Configuracion.path);
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             com.guatefacturas.dte.Guatefac guatefac = new com.guatefacturas.dte.Guatefac();
@@ -46,15 +45,19 @@ namespace guatefac
             guatefac.PreAuthenticate = true;
             
             int pTipoDoc = setTipoDoc(tipoDoc);
-            string s = guatefac
-                .generaDocumento(
-                Configuracion.usuario,
-                Configuracion.password,
-                Configuracion.nit,
-                Int32.Parse(est),
-                pTipoDoc,
-                Configuracion.maquina, "D", xml);
-            return generateDS(evaluateResponse(s));
+             string s = guatefac
+                 .generaDocumento(
+                 Configuracion.usuario,
+                 Configuracion.password,
+                 Configuracion.nit,
+                 Int32.Parse(est),
+                 pTipoDoc,
+                 Configuracion.maquina, "D", xml);
+              return generateDS(evaluateResponse(s));
+
+           // return null;
+
+
         }
             
         public VFPData Deserialize<VFPData>(string enc) 
@@ -151,8 +154,10 @@ namespace guatefac
             dt.Rows.Add(dr);
             DSdetalle.Tables.Add(dt);
 
-            saveXML(respuestaServicio.XML, TIPODOC + FACT_NUM, Configuracion.pathRes);
-
+            if (respuestaServicio.resultado)
+            {
+                saveXML(respuestaServicio.XML, TIPODOC + FACT_NUM, Configuracion.pathRes);
+            }
             return DSdetalle;
         }
 
@@ -201,15 +206,32 @@ namespace guatefac
                     return 1;
                 case "FCAM":
                     return 2;
+                case "FESP":
+                    return 5;
                 case "NCRE":
                     return 10;
                 case "NABN":
                     return 6;
+                case "EXPO":
+                    return 1;
                 default:
                     return 1;
             }
         }
-       
+
+        private string setXML(VFPData data, VFPDataDet dataDet, string tipo)
+        {
+            switch (tipo)
+            {
+                case "FACT":
+                    return XML.setXML(data, dataDet, tipo);
+                case "FESP":
+                    return XMLEspecial.setXML(data, dataDet, tipo);
+                default:
+                    return XML.setXML(data, dataDet, tipo);
+            }
+        }
+
 
     }
 }

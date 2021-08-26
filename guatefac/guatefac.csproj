@@ -118,6 +118,7 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="XML.cs" />
+    <Compile Include="XMLEspecial.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,20 +1,15 @@
 ﻿using guatefac.Models;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Xml.Linq;
 
 namespace guatefac
 {
-    public class XML
+    public class XMLEspecial
     {
-
-        
-
-        public static string setXML (VFPData data, VFPDataDet dataDet, string tipo)
+        public static string setXML(VFPData data, VFPDataDet dataDet, string tipo)
         {
             XDeclaration declaracion = new XDeclaration("1.0", "utf-8", "no");
 
@@ -50,7 +45,7 @@ namespace guatefac
 
 
             DateTime oDate = DateTime.Parse(data.Temp_fact_header.Fechahoraemision);
-            
+
             XElement Fecha = new XElement("Fecha", formatDate(oDate));
             //XElement Fecha = new XElement("Fecha", data.Temp_fact_header.Fechavencimiento);
             infoDoc.Add(Fecha);
@@ -58,20 +53,29 @@ namespace guatefac
             XElement moneda = new XElement("Moneda", data.Temp_fact_header.Moneda);
             infoDoc.Add(moneda);
 
-            XElement tasa = new XElement("Tasa", data.Temp_fact_header.Tasa);
+            XElement tasa = new XElement("Tasa_Cambio", data.Temp_fact_header.Tasa);
             infoDoc.Add(tasa);
+
+            XElement tipoDocIdentificacion = new XElement("TipoDocIdentificacion", data.Temp_fact_header.TipoDocIdentificacion);
+            infoDoc.Add(tipoDocIdentificacion);
+
+            XElement numeroIdentificacion = new XElement("NumeroIdentificacion", data.Temp_fact_header.NumeroIdentificacion);
+            infoDoc.Add(numeroIdentificacion);
+
+            XElement paisEmision = new XElement("PaisEmision", data.Temp_fact_header.Paisemisor);
+            infoDoc.Add(paisEmision);
+
+            XElement departamentoEmision = new XElement("DepartamentoEmision", data.Temp_fact_header.Departamentoemisor);
+            infoDoc.Add(departamentoEmision);
+
+            XElement municipioEmision = new XElement("MunicipioEmision", data.Temp_fact_header.Municipioemisor);
+            infoDoc.Add(municipioEmision);
 
             XElement referencia = new XElement("Referencia", data.Temp_fact_header.Identificadorunico);
             infoDoc.Add(referencia);
 
-            XElement numeroAcceso = new XElement("NumeroAcceso", data.Temp_fact_header.Numeroaccesso);
-            infoDoc.Add(numeroAcceso);
-
-            XElement serieAdmin = new XElement("SerieAdmin");
-            infoDoc.Add(serieAdmin);
-
-            XElement numeroAdmin = new XElement("NumeroAdmin");
-            infoDoc.Add(numeroAdmin);
+            XElement porcISR = new XElement("PorcISR", data.Temp_fact_header.PorcISR);
+            infoDoc.Add(porcISR);
 
             XElement reversion = new XElement("Reversion", "N");
             infoDoc.Add(reversion);
@@ -82,11 +86,11 @@ namespace guatefac
             XElement totales = new XElement("Totales");
             encabezado.Add(totales);
 
-            //falta
+            
             XElement bruto = new XElement("Bruto", data.Temp_fact_header.Bruto);
             totales.Add(bruto);
 
-            //falta
+            
             XElement descuento = new XElement("Descuento", data.Temp_fact_header.Descuento);
             totales.Add(descuento);
 
@@ -113,75 +117,13 @@ namespace guatefac
             XElement total = new XElement("Total", data.Temp_fact_header.Total);
             totales.Add(total);
 
-            //PARA EXPORTACION
-            /////////////////////////////////////////////////////////////////////////////////
+            /********************************************************************************/
 
-            if (tipo.Equals("EXPO"))
-            {
-                XElement datosAdicionales = new XElement("DatosAdicionales");
-                encabezado.Add(datosAdicionales);
-
-                XElement incoterm = new XElement("INCOTERM", data.Temp_fact_header.Incoterm);
-                datosAdicionales.Add(incoterm);
-
-                XElement destinatario = new XElement("DESTINATARIO", data.Temp_fact_header.Destinatario);
-                datosAdicionales.Add(destinatario);
-
-                XElement codigoDestina = new XElement("CODIGODESTINA", data.Temp_fact_header.Codigodestina);
-                datosAdicionales.Add(codigoDestina);
-
-                XElement nombComprador = new XElement("NOMBCOMPRADOR", data.Temp_fact_header.Nombcomprador);
-                datosAdicionales.Add(nombComprador);
-
-                XElement dirComprador = new XElement("DIRCOMPRADOR", data.Temp_fact_header.Dircomprador);
-                datosAdicionales.Add(dirComprador);
-
-                XElement codComprador = new XElement("CODCOMPRADOR", data.Temp_fact_header.Codcomprador);
-                datosAdicionales.Add(codComprador);
-
-                XElement otraRef = new XElement("OTRAREF", data.Temp_fact_header.Otraref);
-                datosAdicionales.Add(otraRef);
-
-                XElement codExport = new XElement("CODEXPORT", data.Temp_fact_header.Codexport);
-                datosAdicionales.Add(codExport);
-
-                XElement dirDest = new XElement("DIRDEST", data.Temp_fact_header.Dirdest);
-                datosAdicionales.Add(dirDest);
-            }
-
-            /****************************/
-
-            if (tipo.Equals("FCAM")) {
-
-                XElement datosAdicionales = new XElement("DatosAdicionales");
-                encabezado.Add(datosAdicionales);
-
-                XElement abonosFacturaCambiaria = new XElement("AbonosFacturaCambiaria");
-                encabezado.Add(abonosFacturaCambiaria);
-
-                XElement abono = new XElement("Abono");
-                abonosFacturaCambiaria.Add(abono);
-
-                //Abono
-                XElement numeroAbono = new XElement("NumeroAbono", data.Temp_fact_header.NumeroAbono);
-                abono.Add(numeroAbono);
-
-                XElement fechaVencimiento = new XElement("FechaVencimiento", data.Temp_fact_header.Fechavencimiento);
-                abono.Add(fechaVencimiento);
-
-                XElement montoAbono = new XElement("MontoAbono", data.Temp_fact_header.Montoabono);
-                abono.Add(montoAbono);
-
-
-            }
-
-             /********************************************************************************/
-
-             //Detalles
+            //Detalles
             XElement detalles = new XElement("Detalles");
             xmlDoc.Add(detalles);
 
-            foreach(Temp_fact_detail det in dataDet.Temp_fact_detail)
+            foreach (Temp_fact_detail det in dataDet.Temp_fact_detail)
             {
                 //Productos
                 XElement productos = new XElement("Productos");
@@ -210,11 +152,11 @@ namespace guatefac
                 productos.Add(impDescuento);
 
                 int esExento = 0;
-                if(data.Temp_fact_header.Exento == "SI")
+                if (data.Temp_fact_header.Exento == "SI")
                 {
                     esExento = 1;
                 }
-                XElement impExento = new XElement("ImpExento", det.ImpExento);
+                XElement impExento = new XElement("ImpExento", esExento);
                 productos.Add(impExento);
 
 
@@ -281,5 +223,4 @@ namespace guatefac
             return newDate;
         }
     }
-
 }
