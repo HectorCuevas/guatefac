@@ -1,4 +1,4 @@
-﻿using System;
+﻿	using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -100,6 +100,54 @@ namespace guatefac.Models
 		[XmlElement(ElementName = "dapreimpreso")]
 		public string DAPreimpreso { get; set; }
 
+		//	EXPORTACION
+
+		[XmlElement(ElementName = "incoterm")]
+		public string Incoterm { get; set; }
+		[XmlElement(ElementName = "destinatario")]
+		public string Destinatario { get; set; }
+		[XmlElement(ElementName = "codigodestina")]
+		public string Codigodestina { get; set; }
+		[XmlElement(ElementName = "nombcomprador")]
+		public string Nombcomprador { get; set; }
+		[XmlElement(ElementName = "dircomprador")]
+		public string Dircomprador { get; set; }
+		[XmlElement(ElementName = "codcomprador")]
+		public string Codcomprador { get; set; }
+		[XmlElement(ElementName = "otraref")]
+		public string Otraref { get; set; }
+		[XmlElement(ElementName = "codexport")]
+		public string Codexport { get; set; }
+		[XmlElement(ElementName = "dirdest")]
+		public string Dirdest { get; set; }
+
+
+
+		//FACTURA CAMBIARIA
+
+		[XmlElement(ElementName = "numeroAbono")]
+		public string NumeroAbono { get; set; }
+
+		[XmlElement(ElementName = "montoabono")]
+		public string Montoabono { get; set; }
+
+
+		//FESP
+
+		[XmlElement(ElementName = "porcisr")]
+		public string PorcISR { get; set; }
+
+		[XmlElement(ElementName = "Tasa_Cambio")]
+		public string Tasa_Cambio { get; set; }
+
+		[XmlElement(ElementName = "tipodocidentificador")]
+		public string TipoDocIdentificacion { get; set; }
+
+		[XmlElement(ElementName = "numeroidentificacion")]
+		public string NumeroIdentificacion { get; set; }
+
+		[XmlElement(ElementName = "Referencia")]
+		public string Referencia { get; set; }
 
 
 	}
